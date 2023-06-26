@@ -15,6 +15,7 @@ export function mjSubmitImagine<T = any>(
         if(midjourneyStore.drawModel == "NIJI"){
             API = import.meta.env.VITE_GLOB_API_MIDJOURNEY_NIJI
         }
+        console.log(API);
         const response = post<T>({
             url: '/mj-submit-imagine',
             data: { prompt: params.prompt,base64:params.base64,API_MIDJOURNEY:API},

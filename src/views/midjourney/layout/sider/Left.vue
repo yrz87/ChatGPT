@@ -265,7 +265,7 @@ function handleReset() {
       
 
 
-      <div class="flex items-center space-x-4">
+      <!-- <div class="flex items-center space-x-4">
         <span class="flex-shrink-0">画质</span>
         <div class="flex flex-wrap items-center gap-4">
           <NSelect
@@ -282,7 +282,7 @@ function handleReset() {
           <div class="large-text">画质：--quality 或 --q</div>
           <div class="large-text">参数释义：更高质量需要更长的时间处理更多细节</div>
         </NTooltip>
-      </div>
+      </div> -->
       <div class="flex items-center space-x-4">
         <span class="flex-shrink-0">混乱</span>
         
@@ -344,17 +344,17 @@ function handleReset() {
       </div>
       
       
-      <div class="flex items-center space-x-4">
+      <!-- <div class="flex items-center space-x-4">
         <span class="flex-shrink-0">默认参数</span>
         <NButton size="small" @click="handleReset">
           {{ $t("common.reset") }}
         </NButton>
-      </div>
-      <div class="flex items-center space-x-4">
+      </div> -->
+      <!-- <div class="flex items-center space-x-4">
         <span class="flex-shrink-0"
           >图片将定时清理，如需要保存您的图片。请自行保存</span
         >
-      </div>
+      </div> -->
     </div>
   </div>
 </template>

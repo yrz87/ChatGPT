@@ -46,12 +46,12 @@ watch(
     flush: "post",
   }
 );
-function handleNav(key:NavType) {
-  console.log(key);
-  settingStore.setNavType(key)
-  router.push({ name: key});
-  // router.replace({name: key})
-}
+// function handleNav(key:NavType) {
+//   // console.log(key);
+//   settingStore.setNavType(key)
+//   router.push({ name: key});
+//   // router.replace({name: key})
+// }
 
 const navTypeOptions: { label: string; key: NavType; name: string;icon: string; }[] = [
   {
@@ -78,12 +78,12 @@ const navTypeOptions: { label: string; key: NavType; name: string;icon: string; 
     key: 'Gallery',
     icon: 'ri:moon-foggy-line',
   },
-  {
-    label: 'AI思维导图',
-    name: 'mind-map',
-    key: 'MindMap',
-    icon: 'iconoir:3d-add-hole',
-  },
+  // {
+  //   label: 'AI思维导图',
+  //   name: 'mind-map',
+  //   key: 'MindMap',
+  //   icon: 'iconoir:3d-add-hole',
+  // },
 ]
 </script>
 
@@ -96,9 +96,17 @@ const navTypeOptions: { label: string; key: NavType; name: string;icon: string; 
   
     <div class="n-layout-sider-scroll-container" style="min-width: 72px; overflow: auto">
       <div class="flex h-full flex-col items-center justify-between bg-[#e8eaf1] px-2 py-4 dark:bg-[#25272d]"> 
+        <a class="h-12 w-12 cursor-pointer rounded-xl bg-white duration-300 dark:bg-[#34373c]">
+          <div class="flex h-full">
+            <div class="m-auto text-center">
+              <SvgIcon class="text-xl" icon="imdi-light:view-dashboard"/>
+            </div>
+          </div>
+        </a>
         <div class="flex flex-col space-y-4">
           <template v-for="item of navTypeOptions" :key="item.key">
-            <div class="h-12 w-12 cursor-pointer rounded-xl bg-white duration-300 dark:bg-[#34373c]"  @click="handleNav(item.key)">
+              <!-- @click="handleNav(item.key)" -->
+            <a :href="item.name" class="h-12 w-12 cursor-pointer rounded-xl bg-white duration-300 dark:bg-[#34373c]">
                 <div class="flex h-full">
                   <div class="m-auto text-center">
                     <NTooltip placement="right" trigger="hover">
@@ -111,11 +119,16 @@ const navTypeOptions: { label: string; key: NavType; name: string;icon: string; 
                     </NTooltip>
                   </div>
                 </div>
-            </div>
+            </a>
           </template>    
         </div>
         <!-- 放入头像及设置按钮 -->
-        <NAvatar size="large" round :src="defaultAvatar" />
+        <a href="user">
+          <NAvatar size="large" round :src="defaultAvatar" />
+        </a>
+        <a href="user">
+          <NAvatar size="large" round :src="defaultAvatar" />
+        </a>
       </div>
       
    </div>

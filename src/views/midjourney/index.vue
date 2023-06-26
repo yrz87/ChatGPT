@@ -25,6 +25,8 @@ import {
   // mjTaskQueue,
   // useGetMidjourneySelfProxyUrl,
 } from "@/api/midjourney";
+
+import { translate } from "@/api/utils";
 import { useMidjourneyStore } from "@/store";
 import { useRoute } from "vue-router";
 import { useMidjourney } from "./hooks/useMidjourney";
@@ -111,10 +113,9 @@ function onPageChange(newPage: number) {
   page.value = newPage;
 }
 const loading = ref<boolean>(false);
-const prompt = ref<string>("");
-const ignorePrompt = ref<string>("");
+let prompt = ref<string>("");
+let ignorePrompt = ref<string>("");
 const buttonDisabled = computed(() => {
-  console.log(imageType,"===imageType");
   if (imageType.value === "BLEND" || imageType.value == "DESCRIBE")
     return false;
   return loading.value || !prompt.value || prompt.value.trim() === "";
@@ -244,8 +245,22 @@ function GetImgageType() {
     return ""; // 返回空字符串，而不是undefined
   }
 }
-
-
+async function doTranslation(val: string){
+  let res = null;
+  try {
+    if(val === "tra"){
+      res = await translate({"query":ignorePrompt});
+      console.log(res);
+      ignorePrompt = res;
+    } else {
+      res = await translate({"query":prompt});
+      console.log(res);
+      prompt = res;
+    }
+  } catch (error) {
+    console.error("Error in translation: ", error);
+  }
+}
 async function handleSubmit() {
   retryCount = 0;
   if (loading.value) return;
@@ -344,7 +359,7 @@ async function handleSubmit() {
     const method = submitMethods[imageType.value];
     const parameters = submitParameters[imageType.value];
     const res = await method(parameters);
-    console.log(res);
+    // console.log(res);
     detailMidjourney(res, index);
   } catch (error: any) {
     console.error(error);
@@ -406,7 +421,7 @@ async function fetchStatusByTaskId(taskId: string, index: number) {
   timerId = setTimeout(async () => {
     try {
       const statusResJson = await mjTaskIdFetch({ taskId, model });
-      console.log(statusResJson, "====statusResJson");
+      // console.log(statusResJson, "====statusResJson");
       if (statusResJson) {
         handleStatus(index, statusResJson, midjourneyMessage, taskId);
       }
@@ -449,10 +464,10 @@ function handleStatus(
   midjourneyMessage.requestOptions.promptEn = statusResJson.promptEn;
   midjourneyMessage.requestOptions.description = statusResJson.description;
   let imgUrl = statusResJson.imageUrl;
-  // if(imgUrl){
-  //   imgUrl = useGetMidjourneySelfProxyUrl(imgUrl);
-  // }
-  console.log("imgUrl:", imgUrl);
+  
+  if(imgUrl){
+    imgUrl = imgUrl.replace("https://cdn.discordapp.com/attachments", "/images/cnd-discordapp")
+  }
   midjourneyMessage.imgUrl = imgUrl;
 
   if (isFinished) {
@@ -485,35 +500,27 @@ function useToPrompt(val: string) {
   prompt.value = val;
 }
 function RefreshData() {
-  console.log("RefreshData");
+  // console.log("RefreshData");
   // 未知原因刷新页面，loading 状态不会重置，手动重置
   dataSources.value.forEach((item, index) => {
     if (!item.finished && item.taskId) {
-      console.log(
-        "====RefreshData===",
-        item.taskId,
-        item.finished,
-        item.taskId
-      );
+      // console.log(
+      //   "====RefreshData===",
+      //   item.taskId,
+      //   item.finished,
+      //   item.taskId
+      // );
       retryInterval = 5000; // 5秒重试间隔
       fetchStatusByTaskId(item.taskId, index);
     }
   });
 }
 function backgroundGetData(){
-  console.log("backgroundGetData");
+  // console.log("backgroundGetData");
   handleStop();
 }
 // 未知原因刷新页面，loading 状态不会重置，手动重置
-dataSources.value.forEach((item, index) => {
-  if (item.finished){
-    let url = item.imgUrl;
-    url = url.replace("https://cdn.discordapp.com/attachments", "/images/cnd-discordapp")
-    console.log(url,"==url");
-
-    updateMidjourneySome(+uuid, index, {imgUrl:url});
-  }
-})
+RefreshData();
 
 interface FileObject {
   file: File;
@@ -563,10 +570,6 @@ let attribute = [
     <main>
       <div class="p-4 space-y-4">
         <h2 class="text-xl font-bold">AI绘画</h2>
-        <!-- <img src="http://localhost:3002/attachments/1119918876113764393/1121350142595965048/morganlisa_4019753687806840_a_yellow_pig_c748bd97-4528-44b5-9313-6a6eef1ca10e.png" /> -->
-        <!-- <img
-          src="http://localhost:3002/attachments/1118849591668899921/1121766035796787270/brownlisa_9760788004717540_447955fd-55af-4f87-b3b8-cf861ad43070.png"
-        /> -->
         <div class="flex items-center space-x-4">
           你想生成什么风格或类型图像？
         </div>
@@ -586,13 +589,6 @@ let attribute = [
           <NUploadDragger>
             <div class="p-4 space-y-4">
               <SvgIcon icon="icon-park:upload-one" />
-              <!-- <NTooltip placement="top" trigger="hover">
-          <template #trigger>
-            <SvgIcon icon="ion:alert-circle-outline" />
-          </template>
-          <div class="large-text">MJ：通用模型</div>
-          <div class="large-text">NIJI：动漫风格模型</div>
-        </NTooltip> -->
               <div class="flex items-center space-x-4">参考图</div>
             </div>
           </NUploadDragger>
@@ -617,9 +613,9 @@ let attribute = [
         </div>
 
         <div>
-          <div class="flex items-center justify-between">
+          <div class="flex items-center justify-between items-center space-x-4">
             <p>生成提示词</p>
-            <!-- <NButton size="small" type="success">翻译</NButton> -->
+            <NButton size="small" type="success" secondary @click="doTranslation('tra')">翻译</NButton>
           </div>
           <NInput
             ref="inputRef"
@@ -633,8 +629,15 @@ let attribute = [
         </div>
         <div>
           <div class="flex items-center justify-between">
-            <p>忽略元素(可选)</p>
-            <!-- <NButton size="small" type="success"> 翻译</NButton> -->
+            <p>忽略元素(可选)
+              <NTooltip placement="top" trigger="hover">
+                <template #trigger>
+                  <SvgIcon icon="ion:alert-circle-outline" />
+                </template>
+                <div class="large-text">{{ignorePlaceholder}}</div>
+              </NTooltip>
+            </p>
+            <NButton size="small" type="success" secondary @click="doTranslation('tra2')">翻译</NButton>
           </div>
           <NInput
             ref="inputRef"
@@ -655,30 +658,22 @@ let attribute = [
 
         <div>
           <div class="flex items-center justify-between">
-            <h2 class="text-xl font-bold">
-              当前任务
-              <NTooltip placement="top" trigger="hover">
-                <template #trigger>
-                  <SvgIcon icon="ion:alert-circle-outline" />
-                </template>
-                <div class="large-text">未启动：任务等待执行</div>
-                <div class="large-text">执行中：任务正在执行中</div>
-                <div class="large-text">失败：任务执行失败</div>
-                <div class="large-text">成功：任务执行成功</div>
-              </NTooltip>
-            </h2>
+            <h2 class="text-xl font-bold">当前任务</h2>
           </div>
-          <div>
+          <!-- <div>
             <NButton strong secondary type="primary" round @click="RefreshData">刷新</NButton>
-          </div>
-          <template v-if="dataSources.length == 0">
-            <NEmpty description="暂无任务"></NEmpty>
-          </template>
+          </div> -->
+          
+          <template v-if="progressNum>0">
           <NCard :bordered="false" class="flex text-xl items-center justify-between text-center">
             <div class="flex-shrink-0">当前{{progressNum}}个进行中的任务,请耐心等待。</div>
             <div class="flex-shrink-0">点击后台执行后,仍可手动刷新列表后进行查看...</div>
             <NButton ghost type="error" @click="backgroundGetData">后台执行</NButton>
           </NCard>
+          </template>
+          <template v-else>
+            <NEmpty description="暂无任务"></NEmpty>
+          </template>
         </div>
 
         <div>
@@ -697,13 +692,13 @@ let attribute = [
             </h2>
             <div>
               <NButton strong secondary type="primary" round @click="RefreshData">刷新</NButton>
-              <NButton strong secondary type="primary" round @click="RefreshData">导出</NButton>
+              <!-- <NButton strong secondary type="primary" round @click="RefreshData">导出</NButton> -->
             </div>
           </div>
           <text>总共：{{ dataSourcesLength }}</text>
 
           <template v-if="dataSources.length == 0">
-            <NEmpty description="暂无任务"></NEmpty>
+            <NEmpty description="暂无数据"></NEmpty>
           </template>
           <!--  -->
           <div
@@ -716,12 +711,8 @@ let attribute = [
               :key="index"
             >
               <div class="flex items-center justify-between">
-                <!-- <NButton round size="small" type="primary" tag="text" ghost>{{
-                  returnStatus(item.status)
-                }}</NButton> -->
-                <!-- <NButton round size="small" type="primary" tag="button" ghost>{{
-                  returnStatus(item.status)
-                }}</NButton> -->
+                <NButton round size="small" type="primary" tag="text" ghost v-if="item.status == 'SUCCESS'">成功</NButton>
+                <NButton round size="small" type="primary" tag="button" ghost v-else>{{item.failReason}}</NButton>
 
                 <NPopover
                   style="max-width: 400px"
@@ -767,14 +758,6 @@ let attribute = [
                       data-group-id=""
                       style="object-fit: contain"
                     />
-                    <!-- <template> -->
-                    <!-- 之前的方式 -->
-                    <!-- <img :src="'https://cdn.discordapp.com/attachments/' + imageId" /> -->
-
-                    <!-- 使用代理的方式 -->
-                    <!-- <img :src="'http://localhost:3000/attachments/' + imageId" /> -->
-
-                    <!-- </template> -->
                   </div>
                   <div class="flex items-center space-x-4" v-else>
                     <div class="flex items-center space-x-4">

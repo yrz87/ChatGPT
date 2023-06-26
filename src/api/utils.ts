@@ -1,5 +1,5 @@
 
-import { post,get } from '@/utils/request/dbRequest'
+import { post } from '@/utils/request/dbRequest'
 
 export function translate<T = any>(
     params: {

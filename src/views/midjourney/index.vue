@@ -712,7 +712,7 @@ let attribute = [
             >
               <div class="flex items-center justify-between">
                 <NButton round size="small" type="primary" tag="text" ghost v-if="item.status == 'SUCCESS'">成功</NButton>
-                <NButton round size="small" type="primary" tag="button" ghost v-else>{{item.failReason}}</NButton>
+                <NButton round size="small" type="primary" tag="text" ghost v-else>{{item.failReason}}</NButton>
 
                 <NPopover
                   style="max-width: 400px"

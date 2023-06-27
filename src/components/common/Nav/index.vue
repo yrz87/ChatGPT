@@ -2,15 +2,15 @@
 import type { CSSProperties } from "vue";
 import { computed, watch } from "vue";
 import { NLayoutSider,NTooltip,NAvatar } from "naive-ui";
-import { useRouter } from 'vue-router'
+// import { useRouter } from 'vue-router'
 import type { NavType } from '@/store/modules/settings/helper'
-import { useAppStore,useSettingStore } from "@/store";
+import { useAppStore } from "@/store";
 import { useBasicLayout } from "@/hooks/useBasicLayout";
 import { SvgIcon } from "@/components/common";
 import defaultAvatar from '@/assets/avatar.jpg'
-const router = useRouter()
+// const router = useRouter()
 const appStore = useAppStore();
-const settingStore = useSettingStore();
+// const settingStore = useSettingStore();
 
 const { isMobile } = useBasicLayout();
 

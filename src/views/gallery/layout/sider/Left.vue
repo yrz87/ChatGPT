@@ -4,7 +4,7 @@ import {
   NButton,
   NImage,
   // NPopconfirm,
-  // NSelect,
+  NSelect,
   // useMessage,
   NSwitch,
   NInputNumber,

@@ -249,11 +249,11 @@ async function doTranslation(val: string){
   let res = null;
   try {
     if(val === "tra"){
-      res = await translate({"query":ignorePrompt});
+      res = await translate({query:ignorePrompt.value});
       console.log(res);
       ignorePrompt = res;
     } else {
-      res = await translate({"query":prompt});
+      res = await translate({query:prompt.value});
       console.log(res);
       prompt = res;
     }
@@ -711,8 +711,8 @@ let attribute = [
               :key="index"
             >
               <div class="flex items-center justify-between">
-                <NButton round size="small" type="primary" tag="text" ghost v-if="item.status == 'SUCCESS'">成功</NButton>
-                <NButton round size="small" type="primary" tag="text" ghost v-else>{{item.failReason}}</NButton>
+                <NButton round size="small" type="primary" tag="div" ghost v-if="item.status == 'SUCCESS'">成功</NButton>
+                <NButton round size="small" type="primary" tag="div" ghost v-else>{{item.failReason}}</NButton>
 
                 <NPopover
                   style="max-width: 400px"

@@ -1,7 +1,7 @@
 
 import { post } from '@/utils/request/dbRequest'
 
-export function translate<T = any>(
+export async function translate<T = any>(
     params: {
         query: string
     },
@@ -11,7 +11,6 @@ export function translate<T = any>(
             url: '/translate',
             data: { query: params.query},
         })
-        // console.log("mjSubmitImagine->response:", response); // 打印服务器返回的数据
         return response.data.trans_result[0].dst;
     } catch (error) {
         console.log("mjSubmitImagine->error,",error);
@@ -19,6 +18,22 @@ export function translate<T = any>(
     }
 }
 
+// export async function translate<T = any>(
+//     params: {
+//         query: string
+//     },
+// ) {
+//     try {
+//         const response = await post<T>({
+//             url: '/translate',
+//             data: { query: params.query},
+//         });
+//         return response.data.trans_result[0].dst;
+//     } catch (error) {
+//         console.log("mjSubmitImagine->error,",error);
+//         return error;
+//     }
+// }
 
 
 // async translate() {

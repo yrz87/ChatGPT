@@ -5,7 +5,7 @@ import {
   NImage,
   // NInput,
   // NPopconfirm,
-  NSelect,
+  // NSelect,
   // useMessage,
   NSwitch,
   NInputNumber,
@@ -16,7 +16,7 @@ import type {
   Aspect,
   DrawModel,
   Stylize,
-  DrawQuality,
+  // DrawQuality,
 } from "@/store/modules/midjourney/helper";
 import { SvgIcon } from "@/components/common";
 import { useMidjourneyStore } from "@/store";
@@ -34,7 +34,7 @@ const midjourneyStore = useMidjourneyStore();
 const aspect = computed(() => midjourneyStore.aspect);
 const drawModel = computed(() => midjourneyStore.drawModel);
 const stylize = computed(() => midjourneyStore.stylize);
-const drawQuality = computed(() => midjourneyStore.drawQuality);
+// const drawQuality = computed(() => midjourneyStore.drawQuality);
 const carryParam = computed(() => midjourneyStore.carryParam);
 const drawModelOptions: { label: string; key: DrawModel; image: string }[] = [
   {
@@ -49,7 +49,6 @@ const drawModelOptions: { label: string; key: DrawModel; image: string }[] = [
   },
 ];
 
-const drawQualityOptions: { label: string; key: DrawQuality; image: string }[] =
   // [
   //   {
   //     label: "一般",
@@ -95,28 +94,29 @@ const drawQualityOptions: { label: string; key: DrawQuality; image: string }[] =
   //     image: NIJIImg,
   //   },
   // ];
-  [
-    {
-      label: "一般",
-      key: "low",
-      image: MidImg,
-    },
-    {
-      label: "清晰",
-      key: "med",
-      image: MidImg,
-    },
-    {
-      label: "高清",
-      key: "high",
-      image: MidImg,
-    },
-    {
-      label: "超高清",
-      key: "very high",
-      image: MidImg,
-    },
-  ];
+// const drawQualityOptions: { label: string; key: DrawQuality; image: string }[] =
+//   [
+//     {
+//       label: "一般",
+//       key: "low",
+//       image: MidImg,
+//     },
+//     {
+//       label: "清晰",
+//       key: "med",
+//       image: MidImg,
+//     },
+//     {
+//       label: "高清",
+//       key: "high",
+//       image: MidImg,
+//     },
+//     {
+//       label: "超高清",
+//       key: "very high",
+//       image: MidImg,
+//     },
+//   ];
 
 const StylizeOptions: { label: string; key: Stylize; image: string }[] = [
   {
@@ -172,9 +172,9 @@ const aspectOptions: {
   },
 ];
 
-function handleReset() {
-  midjourneyStore.resetSetting();
-}
+// function handleReset() {
+//   midjourneyStore.resetSetting();
+// }
 </script>
 
 <template>

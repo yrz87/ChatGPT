@@ -77,7 +77,6 @@ export function mjTaskIdFetch<T = any>(
         if(params.model == "NIJI"){
             API = import.meta.env.VITE_GLOB_API_MIDJOURNEY_NIJI
         }
-        // console.log(params, "==mjTaskIdFetch==params");
         const response = get<T>({
             url: '/mj-task-id-fetch?taskId='+params.taskId+"&API_MIDJOURNEY="+API,
             // data: { taskId: params.taskid},

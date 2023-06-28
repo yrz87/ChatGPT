@@ -6,8 +6,9 @@ const router = express.Router()
 router.post('/mj-submit-imagine', async (req, res) => {
     try {
       const { API_MIDJOURNEY,prompt,base64 } = req.body; 
-      console.log("/mj-submit-imagine",API_MIDJOURNEY+"/mj/submit/imagine",prompt);
+      // console.log("/mj-submit-imagine",API_MIDJOURNEY+"/mj/submit/imagine",prompt);
       const response = await axios.post(API_MIDJOURNEY+"/mj/submit/imagine", { "prompt":prompt,"base64":base64 });
+      // console.log(response.data);
       res.send(response.data);
     } catch (error) {
       res.send(error)
@@ -18,9 +19,10 @@ router.post('/mj-submit-imagine', async (req, res) => {
   router.get('/mj-task-id-fetch', async (req, res) => {
     const taskId = req.query.taskId;
     const API_MIDJOURNEY = req.query.API_MIDJOURNEY;
-    console.log(API_MIDJOURNEY+"/mj/task/"+taskId+"/fetch",taskId);
+    // console.log(API_MIDJOURNEY+"/mj/task/"+taskId+"/fetch",taskId);
     try {
       const response = await axios.get(API_MIDJOURNEY+"/mj/task/"+taskId+"/fetch");
+      // console.log(response.data);
       res.send(response.data)
     } catch (error) {
       res.send(error)

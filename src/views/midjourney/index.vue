@@ -150,6 +150,7 @@ function deleteByIndex(index: number) {
       //如果有正在进行的任务呢
       controller.abort();
       loading.value = false;
+      //如果当前的加载中，则移除
       midjourneyStore.deleteMidjourneyByUuid(+uuid, index);
     },
     onNegativeClick: () => {
@@ -316,29 +317,6 @@ async function handleSubmit() {
   ignorePrompt.value = "";
   fileLists.value.length = 0;
   try {
-    // const submitMethods = {
-    //   IMAGINE: mjSubmitImagine,
-    //   BLEND: mjSubmitBlend,
-    //   DESCRIBE: mjSubmitDescribe,
-    //   "": mjSubmitImagine,
-    // };
-    // // 对于每种方法，定义一个与其对应的参数对象
-    // const submitParameters = {
-    //   IMAGINE: {
-    //     prompt: message,
-    //     base64: imageBase64,
-    //     signal: controller.signal,
-    //   },
-    //   BLEND: { base64Array: imageBase64 },
-    //   DESCRIBE: { base64: imageBase64 },
-    //   "": { prompt: message, base64: imageBase64, signal: controller.signal },
-    // };
-    // const method = submitMethods[imageType.value];
-    // const parameters = submitParameters[imageType.value];
-    // const res = await method(parameters);
-    // console.log(res);
-    // detailMidjourney(res, index);
-
     const submitMethods: { [key: string]: any } = {
       IMAGINE: mjSubmitImagine,
       BLEND: mjSubmitBlend,
@@ -360,7 +338,6 @@ async function handleSubmit() {
     const method = submitMethods[imageType.value];
     const parameters = submitParameters[imageType.value];
     const res = await method(parameters);
-    // console.log(res);
     detailMidjourney(res, index);
   } catch (error: any) {
     console.error(error);
@@ -376,27 +353,7 @@ async function handleSubmit() {
   }
 }
 
-// type Status = "SUCCESS" | "FAILURE" | "FAILED" | "NOT_START" | "IN_PROGRESS" | "SUBMITTED" | "TIMEOUT" | "RES_ERROR" | "UNKNOWN_ERROR";
-
-// const statusMap: { [K in Status]: string } = {
-//   SUCCESS: "成功",
-//   FAILURE: "错误",
-//   FAILED: "错误",
-//   NOT_START: "排队中",
-//   IN_PROGRESS: "执行中",
-//   SUBMITTED: "排队中",
-//   TIMEOUT: "超时",
-//   RES_ERROR: "任务出错",
-//   UNKNOWN_ERROR: "未知错误",
-// };
-
-// function returnStatus(val: Status) {
-//   return statusMap[val] ?? "";
-// }
-
 async function detailMidjourney(resJson: any, index: number) {
-  // const { data: resJson, success } = res;
-  // console.log(resJson,resJson && resJson.code != 1);
 
   if (resJson && resJson.code != 1) {
     updateMidjourneySome(+uuid, index, {
@@ -601,12 +558,13 @@ let attribute = [
           :default-upload="false"
         >
           <NUploadDragger>
-            <div class="flex items-center justify-between items-center space-x-4">
-              <SvgIcon icon="icon-park:upload-one" />
-              </div>
-              <div class="flex items-center justify-between items-center space-x-4">参考图</div>
-              <div class="flex items-center justify-between items-center space-x-4">(可选)</div>
+            <div class="flex flex-wrap items-center gap-4 mb-2">
+              <SvgIcon icon="icon-park:upload-one" /></div>
+              <div class="flex flex-wrap items-center gap-4 mb-2">
+              <p class="pre-box"><br>参考图<br>(可选)</p>
+            </div>
           </NUploadDragger>
+
         </NUpload>
         <!-- <NButton @click="removeFirstImage">Remove First Image</NButton> -->
         <div class="items-center space-x-4" v-if="fileLists.length">
@@ -833,8 +791,9 @@ let attribute = [
                       />
                       <SvgIcon v-else class="text-xl" icon="fxemoji:rocket" />
                     </div>
+                    <br>
                     <div class="flex items-center space-x-4">
-                      <text v-if="item.status == 'FAILURE'">错误信息：</text>
+                      <text v-if="item.status == 'FAILURE'">错误信息：</text><br>
                       {{ item.failReason }}
                     </div>
                   </div>

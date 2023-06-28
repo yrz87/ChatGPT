@@ -151,6 +151,12 @@ function deleteByIndex(index: number) {
       controller.abort();
       loading.value = false;
       //如果当前的加载中，则移除
+      const midjourneyMessage = midjourneyStore.getMidjourneyByUuidAndIndex(+uuid, index);
+      if(!midjourneyMessage?.finished){
+        midjourneyStore.updateMidjourney({
+          progressNum: progressNum.value - 1,
+        });
+      }
       midjourneyStore.deleteMidjourneyByUuid(+uuid, index);
     },
     onNegativeClick: () => {
@@ -610,12 +616,12 @@ let attribute = [
           <div class="flex items-center justify-between">
             <p>
               忽略元素(可选)
-              <NTooltip placement="top" trigger="hover">
+              <!-- <NTooltip placement="top" trigger="hover">
                 <template #trigger>
                   <SvgIcon icon="ion:alert-circle-outline" />
                 </template>
                 <div class="large-text">{{ ignorePlaceholder }}</div>
-              </NTooltip>
+              </NTooltip> -->
             </p>
             <NButton
               size="small"
@@ -677,7 +683,7 @@ let attribute = [
           <div class="flex items-center justify-between">
             <h2 class="text-xl font-bold">
               任务列表
-              <NTooltip placement="top" trigger="hover">
+              <!-- <NTooltip placement="top" trigger="hover">
                 <template #trigger>
                   <SvgIcon icon="ion:alert-circle-outline" />
                 </template>
@@ -685,7 +691,7 @@ let attribute = [
                 <div class="large-text">执行中：任务正在执行中</div>
                 <div class="large-text">失败：任务执行失败</div>
                 <div class="large-text">成功：任务执行成功</div>
-              </NTooltip>
+              </NTooltip> -->
             </h2>
             <div>
               <NButton
@@ -780,20 +786,11 @@ let attribute = [
                       style="object-fit: contain"
                     />
                   </div>
-                  <div class="flex items-center space-x-4" v-else>
-                    <div class="flex items-center space-x-4">
-                      <SvgIcon
-                        class="flex items-center space-x-4 text-xl"
-                        icon="twemoji:anxious-face-with-sweat"
-                        v-if="
-                          item.status == 'FAILURE' || item.status == 'FAILED'
-                        "
-                      />
-                      <SvgIcon v-else class="text-xl" icon="fxemoji:rocket" />
+                  <div class="box-borde rounded-md dark:bg-black flex flex-col items-center py-2" v-else>
+                    <div class="flex items-center justify-center">
+                      <SvgIcon icon="twemoji:anxious-face-with-sweat" />
                     </div>
-                    <br>
-                    <div class="flex items-center space-x-4">
-                      <text v-if="item.status == 'FAILURE'">错误信息：</text><br>
+                    <div class="mt-2 text-center text-xs leading-none text-current">
                       {{ item.failReason }}
                     </div>
                   </div>

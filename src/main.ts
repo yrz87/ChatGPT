@@ -27,3 +27,21 @@ async function bootstrap() {
 }
 
 bootstrap()
+
+
+// const checkDebugger = () => {
+//   const start = new Date();
+//   debugger;
+//   const end = new Date();
+  
+//   if (end.getTime() - start.getTime() > 100) {
+//     // 你可以在这里处理调试模式下的行为，比如停止程序执行
+//     console.log("Debugging mode detected! App is stopping...");
+//     // 或者直接使用alert提示用户
+//     // alert("Debugging mode detected! Please close your devtools.");
+//   }
+
+//   setTimeout(checkDebugger, 1000);
+// };
+
+// checkDebugger();

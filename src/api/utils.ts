@@ -1,6 +1,5 @@
 
 import { post } from '@/utils/request/dbRequest'
-
 export async function translate<T = any>(
     params: {
         query: string
@@ -11,33 +10,19 @@ export async function translate<T = any>(
             url: '/translate',
             data: { query: params.query},
         })
-        return response.data.trans_result[0].dst;
+        return response;
     } catch (error) {
         console.log("mjSubmitImagine->error,",error);
         return error;
     }
 }
 
-// export async function translate<T = any>(
-//     params: {
-//         query: string
-//     },
-// ) {
-//     try {
-//         const response = await post<T>({
-//             url: '/translate',
-//             data: { query: params.query},
-//         });
-//         return response.data.trans_result[0].dst;
-//     } catch (error) {
-//         console.log("mjSubmitImagine->error,",error);
-//         return error;
-//     }
-// }
 
 
 // async translate() {
 //     try {
+
+
 //       const res = await axios.post('http://localhost:3000/translate', {
 //         query: this.query,
 //         from: 'auto',

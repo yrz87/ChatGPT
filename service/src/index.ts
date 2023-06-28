@@ -41,7 +41,8 @@ router.post('/translate', async (req, res) => {
   const APIHttps="https://fanyi-api.baidu.com/api/trans/vip/translate";
   try {
     const result = await axios.get(`${APIHttps}?q=${query}&from=${from}&to=${to}&appid=${appid}&salt=${salt}&sign=${sign}`);
-    res.send(result.data);
+    console.log(result.data);
+    res.send(result.data.data.trans_result[0].dst);
   } catch (err) {
     res.send(err);
   }

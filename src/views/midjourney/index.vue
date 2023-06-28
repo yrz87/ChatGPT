@@ -249,13 +249,13 @@ async function doTranslation(val: string){
   let res = null;
   try {
     if(val === "tra"){
-      res = await translate({query:ignorePrompt.value});
+      res = await translate({query:ignorePrompt.value}) as string;
       console.log(res);
-      ignorePrompt = res;
+      ignorePrompt.value = res;
     } else {
-      res = await translate({query:prompt.value});
+      res = await translate({query:prompt.value}) as string;
       console.log(res);
-      prompt = res;
+      prompt.value = res;
     }
   } catch (error) {
     console.error("Error in translation: ", error);

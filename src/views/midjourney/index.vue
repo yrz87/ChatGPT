@@ -7,7 +7,6 @@ import {
   // NDialog,
   NPagination,
   NTooltip,
-  // NImageGroup,
   NImage,
   NInput,
   NButton,
@@ -32,7 +31,7 @@ import { useRoute } from "vue-router";
 import { useMidjourney } from "./hooks/useMidjourney";
 import { useBasicLayout } from "@/hooks/useBasicLayout";
 import { SvgIcon } from "@/components/common";
-import { t } from '@/locales'
+import { t } from "@/locales";
 const {
   addMidjourney,
   // updateMidjourney,
@@ -47,20 +46,18 @@ const message = useMessage();
 // 定义图片类型
 // export type ImageType = "IMAGINE" | "BLEND" | "DESCRIBE";
 
-
 // let imageType = ref<ImgageType>('');
 // const imageType = ref(""); // 这里你应该对 imageType 进行正确的初始化
 // // const computedImgageType = computed(() => midjourneyStore.imageType);
 let fileLists = ref<FileObject[]>([]);
 
-
-type ImageType = 'IMAGINE' | 'DESCRIBE' | 'BLEND' | '';
+type ImageType = "IMAGINE" | "DESCRIBE" | "BLEND" | "";
 
 interface ImageTypeObject {
   value: ImageType;
 }
 let imageType: ImageTypeObject = {
-  value: ''
+  value: "",
 };
 
 // let imageType: ImageTypeObject;  // 假设你已经初始化了imgageType
@@ -220,7 +217,6 @@ async function upscale(action: string, taskId: string, index: number) {
 //   }
 // }
 
-
 function GetImgageType() {
   if (imageType.value) {
     //有值
@@ -236,24 +232,26 @@ function GetImgageType() {
         }
         return fileLists.value.slice(0, 2).map((file) => file.base64);
       },
-      "": () => "",  // 当imgageType.value为空字符串时，返回空字符串
+      "": () => "", // 当imgageType.value为空字符串时，返回空字符串
     };
 
-    return imageTypes[imageType.value as ImageType] ? imageTypes[imageType.value as ImageType]() : "";
+    return imageTypes[imageType.value as ImageType]
+      ? imageTypes[imageType.value as ImageType]()
+      : "";
   } else {
     message.error("没有上传的图片");
     return ""; // 返回空字符串，而不是undefined
   }
 }
-async function doTranslation(val: string){
+async function doTranslation(val: string) {
   let res = null;
   try {
-    if(val === "tra"){
-      res = await translate({query:ignorePrompt.value}) as string;
+    if (val === "tra") {
+      res = (await translate({ query: ignorePrompt.value })) as string;
       console.log(res);
       ignorePrompt.value = res;
     } else {
-      res = await translate({query:prompt.value}) as string;
+      res = (await translate({ query: prompt.value })) as string;
       console.log(res);
       prompt.value = res;
     }
@@ -294,7 +292,10 @@ async function handleSubmit() {
   //     .map((param) => ` --${param} ${midjourneyStore[param]}`)
   //     .join("");
   // }
-  console.log("midjourneyStore.carryParam:", (midjourneyStore as any).carryParam);
+  console.log(
+    "midjourneyStore.carryParam:",
+    (midjourneyStore as any).carryParam
+  );
   if ((midjourneyStore as any).carryParam) {
     const optionalParams = ["aspect", "stylize", "chaos"].filter(
       (param) => (midjourneyStore as any)[param]
@@ -306,8 +307,8 @@ async function handleSubmit() {
 
   addMidjourneyData(imageType.value, "", message);
   midjourneyStore.updateMidjourney({
-    progressNum:progressNum.value+1
-  })
+    progressNum: progressNum.value + 1,
+  });
   const index = 0;
 
   loading.value = true;
@@ -393,7 +394,6 @@ async function handleSubmit() {
 //   return statusMap[val] ?? "";
 // }
 
-
 async function detailMidjourney(resJson: any, index: number) {
   // const { data: resJson, success } = res;
   // console.log(resJson,resJson && resJson.code != 1);
@@ -464,17 +464,20 @@ function handleStatus(
   midjourneyMessage.requestOptions.promptEn = statusResJson.promptEn;
   midjourneyMessage.requestOptions.description = statusResJson.description;
   let imgUrl = statusResJson.imageUrl;
-  
-  if(imgUrl){
-    imgUrl = imgUrl.replace("https://cdn.discordapp.com/attachments", "/images/cnd-discordapp")
+
+  if (imgUrl) {
+    imgUrl = imgUrl.replace(
+      "https://cdn.discordapp.com/attachments",
+      "/images/cnd-discordapp"
+    );
   }
   midjourneyMessage.imgUrl = imgUrl;
 
   if (isFinished) {
     // midjourneyStore.progressNum
     midjourneyStore.updateMidjourney({
-      progressNum:progressNum.value-1
-    })
+      progressNum: progressNum.value - 1,
+    });
     midjourneyMessage.finished = true;
     loading.value = false;
   } else {
@@ -515,8 +518,11 @@ function RefreshData() {
     }
   });
 }
-function backgroundGetData(){
+function backgroundGetData() {
   // console.log("backgroundGetData");
+  midjourneyStore.updateMidjourney({
+    progressNum: 0,
+  });
   handleStop();
 }
 // 未知原因刷新页面，loading 状态不会重置，手动重置
@@ -527,30 +533,30 @@ interface FileObject {
   base64: string;
   // 在这里添加其它的属性...
 }
-// const handlePreview = ({
-//   fileLists: newFileList,
-// }: {
-//   fileLists: FileObject[];
-// }) => {
-//   fileLists.value = newFileList;
-//   for (const file of fileLists.value) {
-//     const reader = new FileReader();
-//     reader.readAsDataURL(file.file);
-//     reader.onload = () => {
-//       file.base64 = reader.result as string;
-//     };
-//   }
-//   if (fileLists.value.length == 0) {
-//     imageType.value = "";
-//   } else if (!imageType.value && fileLists.value.length == 1) {
-//     imageType.value = "IMAGINE";
-//   }
-// };
+const handlePreview = ({
+  fileList: newFileList,
+}: {
+  fileList: FileObject[];
+}) => {
+  fileLists.value = newFileList;
+  for (const file of fileLists.value) {
+    const reader = new FileReader();
+    reader.readAsDataURL(file.file);
+    reader.onload = () => {
+      file.base64 = reader.result as string;
+    };
+  }
+  if (fileLists.value.length == 0) {
+    imageType.value = "";
+  } else if (!imageType.value && fileLists.value.length == 1) {
+    imageType.value = "IMAGINE";
+  }
+};
 
 function handleStop() {
   if (loading.value) {
-    controller.abort()
-    loading.value = false
+    controller.abort();
+    loading.value = false;
   }
 }
 
@@ -559,10 +565,19 @@ onUnmounted(() => {
 });
 
 let attribute = [
-  {tag:"UPSCALE",name:"放大",note:"参数释义：放大某张图片 如 U1 放大第一张图片，以此类推",list:["U1","U2","U3","U4"]},
-  {tag:"VARIATION",name:"变换",note:"参数释义：以某张图片为基准重新生成 如 V1则变换第一张图片，以此类推",list:["V1","V2","V3","V4"]},
-
-]
+  {
+    tag: "UPSCALE",
+    name: "放大",
+    note: "参数释义：放大某张图片 如 U1 放大第一张图片，以此类推",
+    list: ["U1", "U2", "U3", "U4"],
+  },
+  {
+    tag: "VARIATION",
+    name: "变换",
+    note: "参数释义：以某张图片为基准重新生成 如 V1则变换第一张图片，以此类推",
+    list: ["V1", "V2", "V3", "V4"],
+  },
+];
 </script>
 
 <template>
@@ -573,28 +588,27 @@ let attribute = [
         <div class="flex items-center space-x-4">
           你想生成什么风格或类型图像？
         </div>
-        <!-- :fileList="fileLists" -->
-        <!-- @change="handlePreview" -->
+        
         <NUpload
           directory-dnd
           :max="2"
           multiple
-          type="primary"
           list-type="image-card"
+          :fileList="fileLists"
+          @change="handlePreview"
+          type="primary"
           accept=".png,.jpg,.webp,.jpeg"
-          
-          
           :default-upload="false"
         >
           <NUploadDragger>
-            <div class="p-4 space-y-4">
+            <div class="flex items-center justify-between items-center space-x-4">
               <SvgIcon icon="icon-park:upload-one" />
-              <div class="flex items-center space-x-4">参考图</div>
-            </div>
+              </div>
+              <div class="flex items-center justify-between items-center space-x-4">参考图</div>
+              <div class="flex items-center justify-between items-center space-x-4">(可选)</div>
           </NUploadDragger>
         </NUpload>
         <!-- <NButton @click="removeFirstImage">Remove First Image</NButton> -->
-        <!-- </NImageGroup> -->
         <div class="items-center space-x-4" v-if="fileLists.length">
           <div class="flex flex-wrap items-center gap-4">
             <template v-for="item of imgageTypeOptions" :key="item.key">
@@ -615,35 +629,51 @@ let attribute = [
         <div>
           <div class="flex items-center justify-between items-center space-x-4">
             <p>生成提示词</p>
-            <NButton size="small" type="success" secondary @click="doTranslation('tra')">翻译</NButton>
+            <NButton
+              size="small"
+              type="success"
+              secondary
+              @click="doTranslation('tra')"
+              >翻译</NButton
+            >
           </div>
           <NInput
             ref="inputRef"
             v-model:value="prompt"
             type="textarea"
-            :disabled="imageType.value == 'BLEND' || imageType.value == 'DESCRIBE'"
+            :disabled="
+              imageType.value == 'BLEND' || imageType.value == 'DESCRIBE'
+            "
             :placeholder="placeholder"
             :autosize="{ minRows: 1, maxRows: isMobile ? 4 : 8 }"
           />
-
         </div>
         <div>
           <div class="flex items-center justify-between">
-            <p>忽略元素(可选)
+            <p>
+              忽略元素(可选)
               <NTooltip placement="top" trigger="hover">
                 <template #trigger>
                   <SvgIcon icon="ion:alert-circle-outline" />
                 </template>
-                <div class="large-text">{{ignorePlaceholder}}</div>
+                <div class="large-text">{{ ignorePlaceholder }}</div>
               </NTooltip>
             </p>
-            <NButton size="small" type="success" secondary @click="doTranslation('tra2')">翻译</NButton>
+            <NButton
+              size="small"
+              type="success"
+              secondary
+              @click="doTranslation('tra2')"
+              >翻译</NButton
+            >
           </div>
           <NInput
             ref="inputRef"
             v-model:value="ignorePrompt"
             type="textarea"
-            :disabled="imageType.value == 'BLEND' || imageType.value == 'DESCRIBE'"
+            :disabled="
+              imageType.value == 'BLEND' || imageType.value == 'DESCRIBE'
+            "
             :placeholder="ignorePlaceholder"
             :autosize="{ minRows: 1, maxRows: isMobile ? 4 : 8 }"
           />
@@ -663,13 +693,22 @@ let attribute = [
           <!-- <div>
             <NButton strong secondary type="primary" round @click="RefreshData">刷新</NButton>
           </div> -->
-          
-          <template v-if="progressNum>0">
-          <NCard :bordered="false" class="flex text-xl items-center justify-between text-center">
-            <div class="flex-shrink-0">当前{{progressNum}}个进行中的任务,请耐心等待。</div>
-            <div class="flex-shrink-0">点击后台执行后,仍可手动刷新列表后进行查看...</div>
-            <NButton ghost type="error" @click="backgroundGetData">后台执行</NButton>
-          </NCard>
+
+          <template v-if="progressNum > 0">
+            <NCard
+              :bordered="false"
+              class="flex text-xl items-center justify-between text-center"
+            >
+              <div class="flex-shrink-0">
+                当前{{ progressNum }}个进行中的任务,请耐心等待。
+              </div>
+              <div class="flex-shrink-0">
+                点击后台执行后,仍可手动刷新列表后进行查看...
+              </div>
+              <NButton ghost type="error" @click="backgroundGetData"
+                >后台执行</NButton
+              >
+            </NCard>
           </template>
           <template v-else>
             <NEmpty description="暂无任务"></NEmpty>
@@ -691,7 +730,14 @@ let attribute = [
               </NTooltip>
             </h2>
             <div>
-              <NButton strong secondary type="primary" round @click="RefreshData">刷新</NButton>
+              <NButton
+                strong
+                secondary
+                type="primary"
+                round
+                @click="RefreshData"
+                >刷新</NButton
+              >
               <!-- <NButton strong secondary type="primary" round @click="RefreshData">导出</NButton> -->
             </div>
           </div>
@@ -710,40 +756,57 @@ let attribute = [
               v-for="(item, index) of dataSources"
               :key="index"
             >
-              <div class="flex items-center justify-between">
-                <NButton round size="small" type="primary" tag="div" ghost v-if="item.status == 'SUCCESS'">成功</NButton>
-                <NButton round size="small" type="primary" tag="div" ghost v-else>{{item.failReason}}</NButton>
-
-                <NPopover
-                  style="max-width: 400px"
-                  placement="top"
-                  trigger="hover"
-                >
-                  <template #trigger>
-                    <div>
-                      <!-- 添加一个div作为唯一的直接子元素 -->
-                      <NButton
-                        size="small"
-                        @click="useToPrompt(item.requestOptions.promptEn)"
-                        v-if="!(item.action == 'UPSCALE') && item.finished"
-                      >
-                        <SvgIcon icon="ion:brush-outline" />使用
-                      </NButton>
-                    </div>
-                  </template>
-                  <div class="large-text">
-                    {{ item.requestOptions.promptEn }}
-                  </div>
-                </NPopover>
-
+              <div class="flex items-center justify-between" v-if="item.status">
                 <NButton
+                  round
                   size="small"
-                  v-if="item.status == 'SUCCESS' && item.imgUrl"
-                  ><SvgIcon icon="ion:download-outline" />下载</NButton
+                  type="primary"
+                  tag="div"
+                  ghost
+                  v-if="item.status == 'SUCCESS'"
+                  >成功</NButton
                 >
-                <NButton size="small" @click="deleteByIndex(index)"
-                  ><SvgIcon icon="ri:delete-bin-line" />删除</NButton
+                <NButton
+                  round
+                  size="small"
+                  type="primary"
+                  tag="div"
+                  ghost
+                  v-else
+                  >{{ item.failReason }}</NButton
                 >
+                <div class="flex items-center space-x-2">
+                  <NPopover
+                    style="max-width: 400px"
+                    placement="top"
+                    trigger="hover"
+                  >
+                    <template #trigger>
+                      <div>
+                        <!-- 添加一个div作为唯一的直接子元素 -->
+                        <NButton
+                          size="small"
+                          @click="useToPrompt(item.requestOptions.promptEn)"
+                          v-if="!(item.action == 'UPSCALE') && item.finished"
+                        >
+                          <SvgIcon icon="ion:brush-outline" />使用
+                        </NButton>
+                      </div>
+                    </template>
+                    <div class="large-text">
+                      {{ item.requestOptions.promptEn }}
+                    </div>
+                  </NPopover>
+
+                  <NButton
+                    size="small"
+                    v-if="item.status == 'SUCCESS' && item.imgUrl"
+                    ><SvgIcon icon="ion:download-outline" />下载</NButton
+                  >
+                  <NButton size="small" @click="deleteByIndex(index)"
+                    ><SvgIcon icon="ri:delete-bin-line" />删除</NButton
+                  >
+                </div>
               </div>
               <div class="my-4 h-[280px]" v-if="item.finished">
                 <div
@@ -802,27 +865,38 @@ let attribute = [
               >
                 <div class="flex-1">
                   <div>
-                    <div class="mb-2 flex items-center justify-between" v-for="(obj, index2) of attribute" :key="index2">
-                      <span>{{obj.name}}：</span>
+                    <div
+                      class="mb-2 flex items-center justify-between"
+                      v-for="(obj, index2) of attribute"
+                      :key="index2"
+                    >
+                      <span>{{ obj.name }}：</span>
                       <NTooltip placement="right" trigger="hover">
                         <template #trigger>
                           <SvgIcon icon="ion:alert-circle-outline" />
                         </template>
                         <div class="large-text">
-                          {{obj.note}}
+                          {{ obj.note }}
                         </div>
                       </NTooltip>
                       <div class="flex-1">
                         <div class="flex items-center justify-around">
                           <NButton
-                            v-for="(obj2, index3) of obj.list" :key="index3"
+                            v-for="(obj2, index3) of obj.list"
+                            :key="index3"
                             size="small"
                             :disabled="!item.finished || !item.imgUrl"
-                            @click="handleButtonClick(obj.tag, item.taskId, index3)">{{obj2}}</NButton>
+                            @click="
+                              handleButtonClick(obj.tag, item.taskId, index3)
+                            "
+                            >{{ obj2 }}</NButton
+                          >
                         </div>
                       </div>
                     </div>
-                    <div class="flex items-center justify-between text-slate-500">
+                    <div
+                      class="flex items-center justify-between text-slate-500"
+                    >
                       <span>时间：{{ item.dateTime }}</span>
                     </div>
                   </div>

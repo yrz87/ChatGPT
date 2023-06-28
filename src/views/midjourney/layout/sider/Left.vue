@@ -7,7 +7,7 @@ import {
   // NPopconfirm,
   // NSelect,
   // useMessage,
-  NSwitch,
+  // NSwitch,
   NInputNumber,
   NTooltip,
 } from "naive-ui";
@@ -35,7 +35,7 @@ const aspect = computed(() => midjourneyStore.aspect);
 const drawModel = computed(() => midjourneyStore.drawModel);
 const stylize = computed(() => midjourneyStore.stylize);
 // const drawQuality = computed(() => midjourneyStore.drawQuality);
-const carryParam = computed(() => midjourneyStore.carryParam);
+// const carryParam = computed(() => midjourneyStore.carryParam);
 const drawModelOptions: { label: string; key: DrawModel; image: string }[] = [
   {
     label: "MJ",
@@ -49,51 +49,51 @@ const drawModelOptions: { label: string; key: DrawModel; image: string }[] = [
   },
 ];
 
-  // [
-  //   {
-  //     label: "一般",
-  //     key: "",
-  //     image: MidImg,
-  //   },
-  //   {
-  //     label: "真实感",
-  //     key: "Quixel Megascans Render",
-  //     image: MidImg,
-  //   },
-  //   {
-  //     label: "全高清",
-  //     key: "FHD",
-  //     image: MidImg,
-  //   },
-  //   {
-  //     label: "1080P",
-  //     key: "1080P",
-  //     image: MidImg,
-  //   },{
-  //     label: "4K",
-  //     key: "4K",
-  //     image: MidImg,
-  //   },{
-  //     label: "8K",
-  //     key: "8K",
-  //     image: MidImg,
-  //   },
-  //   {
-  //     label: "高细节",
-  //     key: "high detail",
-  //     image: NIJIImg,
-  //   },
-  //   {
-  //     label: "高品质",
-  //     key: "hyper quality",
-  //     image: MidImg,
-  //   },
-  //   {
-  //     label: "高分辨率",
-  //     key: "high resolution",
-  //     image: NIJIImg,
-  //   },
-  // ];
+// [
+//   {
+//     label: "一般",
+//     key: "",
+//     image: MidImg,
+//   },
+//   {
+//     label: "真实感",
+//     key: "Quixel Megascans Render",
+//     image: MidImg,
+//   },
+//   {
+//     label: "全高清",
+//     key: "FHD",
+//     image: MidImg,
+//   },
+//   {
+//     label: "1080P",
+//     key: "1080P",
+//     image: MidImg,
+//   },{
+//     label: "4K",
+//     key: "4K",
+//     image: MidImg,
+//   },{
+//     label: "8K",
+//     key: "8K",
+//     image: MidImg,
+//   },
+//   {
+//     label: "高细节",
+//     key: "high detail",
+//     image: NIJIImg,
+//   },
+//   {
+//     label: "高品质",
+//     key: "hyper quality",
+//     image: MidImg,
+//   },
+//   {
+//     label: "高分辨率",
+//     key: "high resolution",
+//     image: NIJIImg,
+//   },
+// ];
 // const drawQualityOptions: { label: string; key: DrawQuality; image: string }[] =
 //   [
 //     {
@@ -181,7 +181,7 @@ const aspectOptions: {
   <div class="p-4 space-y-5 min-h-200">
     <div class="space-y-6">
       <div class="mb-4 flex items-center text-sm">
-        <span class="mr-1 text-sm">图片比例</span>
+        <div class="mr-1 text-sm">图片比例</div>
         <NTooltip placement="top" trigger="hover">
           <template #trigger>
             <SvgIcon icon="ion:alert-circle-outline" />
@@ -326,23 +326,10 @@ const aspectOptions: {
       <div class="flex items-center space-x-4">
         <NInputNumber v-model:value="midjourneyStore.stylize" />
       </div>
-      <div class="flex items-center space-x-4">
-        <span class="flex-shrink-0">设定</span>
-      </div>
-      <div class="flex items-center space-x-4">
-          <span class="flex-shrink-0">携带参数</span>
-          <NSwitch v-model:value="carryParam" @update:value="midjourneyStore.setCarryParam(carryParam)" />
-          <NTooltip placement="top" trigger="hover">
-            <template #trigger>
-              <SvgIcon icon="ion:alert-circle-outline" />
-            </template>
-            <div class="large-text">是否自动携带参数</div>
-            <div class="large-text">开启：使用设定参数</div>
-            <div class="large-text">关闭：可在提示词框自行设定参数</div>
-          </NTooltip>
-          
-      </div>
-      
+     
+      <div ><div  class="flex items-center justify-between"><div  class="flex h-8 items-center text-sm"><div  class="mr-1 text-sm">余额</div></div><div  class="flex-1"><span >(10)</span></div><div  class="mr-2 flex items-center space-x-2"><button  class="n-button n-button--default-type n-button--tiny-type n-button--color" tabindex="0" type="button" style="--n-bezier: cubic-bezier(.4, 0, .2, 1); --n-bezier-ease-out: cubic-bezier(0, 0, .2, 1); --n-ripple-duration: .6s; --n-opacity-disabled: 0.5; --n-wave-opacity: 0.6; font-weight: 400; --n-color: #0000; --n-color-hover: #0000; --n-color-pressed: #0000; --n-color-focus: #0000; --n-color-disabled: #0000; --n-ripple-color: #0000; --n-text-color: #5ec269; --n-text-color-hover: rgba(120, 204, 129, 1); --n-text-color-pressed: rgba(83, 171, 92, 1); --n-text-color-focus: rgba(120, 204, 129, 1); --n-text-color-disabled: #5ec269; --n-border: none; --n-border-hover: none; --n-border-pressed: none; --n-border-focus: none; --n-border-disabled: none; --n-width: initial; --n-height: initial; --n-font-size: 12px; --n-padding: initial; --n-icon-size: 14px; --n-icon-margin: 6px; --n-border-radius: initial;"><!----><!----><span class="n-button__content"> 刷新 </span><!----><!----><!----></button><button  class="n-button n-button--default-type n-button--tiny-type n-button--color" tabindex="0" type="button" style="--n-bezier: cubic-bezier(.4, 0, .2, 1); --n-bezier-ease-out: cubic-bezier(0, 0, .2, 1); --n-ripple-duration: .6s; --n-opacity-disabled: 0.5; --n-wave-opacity: 0.6; font-weight: 400; --n-color: #0000; --n-color-hover: #0000; --n-color-pressed: #0000; --n-color-focus: #0000; --n-color-disabled: #0000; --n-ripple-color: #0000; --n-text-color: #5ec269; --n-text-color-hover: rgba(120, 204, 129, 1); --n-text-color-pressed: rgba(83, 171, 92, 1); --n-text-color-focus: rgba(120, 204, 129, 1); --n-text-color-disabled: #5ec269; --n-border: none; --n-border-hover: none; --n-border-pressed: none; --n-border-focus: none; --n-border-disabled: none; --n-width: initial; --n-height: initial; --n-font-size: 12px; --n-padding: initial; --n-icon-size: 14px; --n-icon-margin: 6px; --n-border-radius: initial;"><!----><!----><span class="n-button__content"> 充值 </span><!----><!----><!----></button></div><!----><span  class="text-base text-neutral-400"><svg  aria-hidden="true" width="1em" height="1em" class=""><use xlink:href="#icon-error-warning-line" fill="currentColor"></use></svg></span><!----></div><div  class="space-y-2"><!----><div  class="mb-2"><p  class="pre-box">注册赠送额度 15 <br> 绘画消耗额度 4<br>任务失败会退款（15分钟内）
+<p style="color: red; margin-top: 10px; margin-bottom: 10px;">描述词现在支持中文，自动帮你转换英文</p>
+<h3 style="color: red; margin-top: 10px; margin-bottom: 10px;">新增图生描述词，消耗额度1（06.28）</h3></p></div></div></div>
       
       <!-- <div class="flex items-center space-x-4">
         <span class="flex-shrink-0">默认参数</span>

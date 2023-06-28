@@ -2,13 +2,13 @@
 import type { CSSProperties } from "vue";
 import { computed, watch } from "vue";
 import { NLayoutSider,NTooltip,NAvatar } from "naive-ui";
-// import { useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 import type { NavType } from '@/store/modules/settings/helper'
 import { useAppStore } from "@/store";
 import { useBasicLayout } from "@/hooks/useBasicLayout";
 import { SvgIcon } from "@/components/common";
 import defaultAvatar from '@/assets/avatar.jpg'
-// const router = useRouter()
+const router = useRouter()
 const appStore = useAppStore();
 // const settingStore = useSettingStore();
 
@@ -46,12 +46,10 @@ watch(
     flush: "post",
   }
 );
-// function handleNav(key:NavType) {
-//   // console.log(key);
-//   settingStore.setNavType(key)
-//   router.push({ name: key});
-//   // router.replace({name: key})
-// }
+function handleNav(key:NavType) {
+
+  router.push('/'+key);
+}
 
 const navTypeOptions: { label: string; key: NavType; name: string;icon: string; }[] = [
   {
@@ -91,22 +89,21 @@ const navTypeOptions: { label: string; key: NavType; name: string;icon: string; 
   <NLayoutSider
     :width="72"
     bordered
-    :style="getMobileClass"
+    :style="getMobileClass" 
   >
   
     <div class="n-layout-sider-scroll-container" style="min-width: 72px; overflow: auto">
       <div class="flex h-full flex-col items-center justify-between bg-[#e8eaf1] px-2 py-4 dark:bg-[#25272d]"> 
-        <a class="h-12 w-12 cursor-pointer rounded-xl bg-white duration-300 dark:bg-[#34373c]">
+        <!-- <a class="h-12 w-12 cursor-pointer rounded-xl bg-white duration-300 dark:bg-[#34373c]">
           <div class="flex h-full">
             <div class="m-auto text-center">
               <SvgIcon class="text-xl" icon="imdi-light:view-dashboard"/>
             </div>
           </div>
-        </a>
+        </a> -->
         <div class="flex flex-col space-y-4">
           <template v-for="item of navTypeOptions" :key="item.key">
-              <!-- @click="handleNav(item.key)" -->
-            <a :href="item.name" class="h-12 w-12 cursor-pointer rounded-xl bg-white duration-300 dark:bg-[#34373c]">
+            <NButton class="h-12 w-12 cursor-pointer rounded-xl bg-white duration-300 dark:bg-[#34373c]" @click="handleNav(item.name)">
                 <div class="flex h-full">
                   <div class="m-auto text-center">
                     <NTooltip placement="right" trigger="hover">
@@ -114,21 +111,22 @@ const navTypeOptions: { label: string; key: NavType; name: string;icon: string; 
                         <SvgIcon class="text-xl" :icon="item.icon"/>
                       </template>
                       <div class="large-text">
-                        {{ item.name }}
+                        {{ item.label }}
                       </div>
                     </NTooltip>
                   </div>
                 </div>
-            </a>
+            </NButton>
           </template>    
         </div>
         <!-- 放入头像及设置按钮 -->
-        <a href="user">
-          <NAvatar size="large" round :src="defaultAvatar" />
-        </a>
-        <a href="user">
-          <NAvatar size="large" round :src="defaultAvatar" />
-        </a>
+        <div class="flex flex-col space-y-4">
+          <SvgIcon class="text-xl" icon="ri:contrast-line"/>
+          <a href="user">
+            <NAvatar size="large" round :src="defaultAvatar" />
+          </a>
+        </div>
+        
       </div>
       
    </div>

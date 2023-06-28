@@ -1,17 +1,17 @@
 <script setup lang='ts'>
-import { computed,Ref} from 'vue'
-import { useTokenStore } from '@/store'
+import { computed} from "vue";
+import { useTokenStore } from "@/store";
 // import { NAvatar } from 'naive-ui'
 // import { useUserStore } from '@/store'
 // import defaultAvatar from '@/assets/avatar.jpg'
 // import { isString } from '@/utils/is'
-const tokenStore = useTokenStore()
-const authInfo = computed(() => tokenStore.authInfo)
-const surplusNum: Ref<number> = computed(() => authInfo.value.surplusNum)
-const openFreeNum = computed(() => authInfo.value.openFreeNum)
-const tokenVerification = computed(() => authInfo.value.tokenVerification)
-const freeNum = computed(() => authInfo.value.freeNum)
-const expressDate = computed(() => authInfo.value.expressDate)
+const tokenStore = useTokenStore();
+const authInfo = computed(() => tokenStore.authInfo);
+// const surplusNum: Ref<number> = computed(() => authInfo.value.surplusNum);
+const openFreeNum = computed(() => authInfo.value.openFreeNum);
+const tokenVerification = computed(() => authInfo.value.tokenVerification);
+const freeNum = computed(() => authInfo.value.freeNum);
+// const expressDate = computed(() => authInfo.value.expressDate);
 </script>
 
 <template>
@@ -42,23 +42,61 @@ const expressDate = computed(() => authInfo.value.expressDate)
     </div> -->
 
     <div class="flex-1 min-w-0">
-      <h2 class="overflow-hidden text-xs text-gray-500 text-ellipsis whitespace-nowrap" style="cursor:pointer;">
+      <!-- <h2 class="overflow-hidden text-xs text-gray-500 text-ellipsis whitespace-nowrap" style="cursor:pointer;">
         客服QQ：657008145
+      </h2> -->
+      <h2
+        class="overflow-hidden font-bold text-md text-ellipsis whitespace-nowrap"
+        v-if="freeNum > 0 && openFreeNum && !tokenVerification"
+      >
+        <span
+          >免费试用次数:<span style="color: red">{{
+            freeNum
+          }}</span></span
+        >
       </h2>
-      <h2 class="overflow-hidden font-bold text-md text-ellipsis whitespace-nowrap" v-if="freeNum>0 && openFreeNum && !tokenVerification">
-        <span>免费试用次数:<span style="color:red">{{freeNum}}</span></span>
+      <h2
+        class="overflow-hidden font-bold text-md text-ellipsis whitespace-nowrap"
+        v-if="authInfo.userIdentify == 0"
+      >
+        <span
+          >对话额度：<span style="color: red">{{
+            authInfo.surplusNum
+          }}</span></span
+        >
       </h2>
-      <h2 class="overflow-hidden font-bold text-md text-ellipsis whitespace-nowrap" v-if="authInfo.userIdentify == 0">
-        <span>VIP剩余积分为:<span style="color:red">{{surplusNum}}</span></span>
+      <h2
+        class="overflow-hidden font-bold text-md text-ellipsis whitespace-nowrap"
+        v-if="authInfo.userIdentify == 0"
+      >
+        <span>我已使用：<span style="color: red">{{ authInfo.useNum }}</span></span>
       </h2>
-      <h2 class="overflow-hidden font-bold text-md text-ellipsis whitespace-nowrap" v-if="authInfo.userIdentify == 1">
-        <span>VIP到期时间为:<span style="color:red">{{expressDate}}</span></span>
+      <h2
+        class="overflow-hidden font-bold text-md text-ellipsis whitespace-nowrap"
+        v-if="authInfo.userIdentify == 1"
+      >
+        <span
+          >到期时间为：<span style="color: red">{{
+            authInfo.expressDate
+          }}</span></span
+        >
       </h2>
+      <h2
+        class="overflow-hidden font-bold text-md text-ellipsis whitespace-nowrap"
+        v-if="authInfo.userIdentify == 1"
+      >
+        <span
+          >注册时间为：<span style="color: red">{{
+            authInfo.startDate
+          }}</span></span
+        >
+      </h2>
+      <!-- <div class="my-1 flex items-center select-none">对话额度： 0 次</div> -->
       <!-- {{authInfo.freeNum}}--{{authInfo.openFreeNum}}
       {{authInfo.tokenVerification}} -->
-      <h2 class="overflow-hidden text-xs text-gray-500 text-ellipsis whitespace-nowrap">
+      <!-- <h2 class="overflow-hidden text-xs text-gray-500 text-ellipsis whitespace-nowrap">
         <span><span style="color:red">密钥:</span>{{authInfo.systemToken}}</span>
-      </h2>
+      </h2> -->
       <!-- <h2 class="overflow-hidden font-bold text-md text-ellipsis whitespace-nowrap">
         <span><a href="https://www.explainthis.io/zh-hans/chatgpt">👉 ChatGPT 指令大全</a></span>
       </h2> -->

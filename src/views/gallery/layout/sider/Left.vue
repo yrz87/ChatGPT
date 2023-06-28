@@ -352,6 +352,22 @@ function handleReset() {
           >图片将定时清理，如需要保存您的图片。请自行保存</span
         >
       </div>
+      <div class="flex items-center space-x-4">
+        <span class="flex-shrink-0">余额(10)</span>
+      </div>
+      <div class="flex items-center space-x-4">
+          <span class="flex-shrink-0">携带参数</span>
+          <NSwitch v-model:value="carryParam" @update:value="midjourneyStore.setCarryParam(carryParam)" />
+          <NTooltip placement="top" trigger="hover">
+            <template #trigger>
+              <SvgIcon icon="ion:alert-circle-outline" />
+            </template>
+            <div class="large-text">是否自动携带参数</div>
+            <div class="large-text">开启：使用设定参数</div>
+            <div class="large-text">关闭：可在提示词框自行设定参数</div>
+          </NTooltip>
+          
+      </div>
     </div>
   </div>
 </template>

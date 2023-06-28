@@ -14,7 +14,7 @@ import { HoverButton, SvgIcon } from '@/components/common'
 import { useBasicLayout } from '@/hooks/useBasicLayout'
 import HelpDoc from './layout/HelpDoc.vue'
 import type { Model } from '@/store/modules/settings/helper'
-import { Setting } from '@/components/common'
+// import { Setting } from '@/components/common'
 import {
   useChatStore,
   usePromptStore,
@@ -55,7 +55,7 @@ const promptStore = usePromptStore()
 // 使用storeToRefs，保证store修改后，联想部分能够重新渲染
 const { promptList: promptTemplate } = storeToRefs<any>(promptStore)
 
-const show = ref(false);
+// const show = ref(false);
 
 const userStore = useUserStore();
 
@@ -302,31 +302,31 @@ async function onConversation() {
 
   if (openFreeNum.value && !tokenVerification.value) {
     if (freeNum.value <= 0) {
-      show.value = true;
-      console.log("您的密钥为空", openFreeNum.value, !tokenVerification.value, freeNum.value);
+      // show.value = true;
+      ms.error("您的密钥为空!");
       return;
     }
   } else {
     const today = new Date();
     if (systemToken.value === "" || !tokenVerification.value) {
-      show.value = true;
-      console.log("//密钥为空//密钥无效");
+      // show.value = true;
+      ms.error("//密钥为空//密钥无效");
       return;
     } else if (userIdentify.value === 0 && surplusNum.value <= 0) {
-      show.value = true;
-      console.log("积分已经用完了");
+      // show.value = true;
+      ms.error("积分已经用完了");
       return;
     } else if (userIdentify.value === 1 && (today.getTime() > expressDateNumber.value.value || expressDateNumber.value.value === 0)) {
-      show.value = true;
-      console.log("您的密钥已经过期，请重新申请");
+      // show.value = true;
+      ms.error("您的密钥已经过期，请重新申请");
       return;
     } else if (settingStore.model === 'gpt-4' && userIdentify.value === 1 && authInfo.value.vipToGpt4Num <= 0) {
-      show.value = true;
-      console.log("您的会员版chatgpt - 4次数已经用完了");
+      // show.value = true;
+      ms.error("您的会员版chatgpt - 4次数已经用完了");
       return;
     } else if (settingStore.model === 'gpt-4' && userIdentify.value === 0 && surplusNum.value < 10) {
-      show.value = true;
-      console.log("您的积分不足chatgpt4次数已经用完了");
+      // show.value = true;
+      ms.error("您的积分不足chatgpt4次数已经用完了");
       return;
     }
   }
@@ -483,31 +483,31 @@ async function onRegenerate(index: number) {
 
   if (openFreeNum.value && !tokenVerification.value) {
     if (freeNum.value <= 0) {
-      show.value = true;
-      console.log("您的密钥为空", openFreeNum.value, !tokenVerification.value, freeNum.value);
+      // show.value = true;
+      ms.error("您的密钥为空!");
       return;
     }
   } else {
     const today = new Date();
     if (systemToken.value === "" || !tokenVerification.value) {
-      show.value = true;
-      console.log("//密钥为空//密钥无效");
+      // show.value = true;
+      ms.error("//密钥为空//密钥无效");
       return;
     } else if (userIdentify.value === 0 && surplusNum.value <= 0) {
-      show.value = true;
-      console.log("积分已经用完了");
+      // show.value = true;
+      ms.error("积分已经用完了");
       return;
     } else if (userIdentify.value === 1 && (today.getTime() > expressDateNumber.value.value || expressDateNumber.value.value === 0)) {
-      show.value = true;
-      console.log("您的密钥已经过期，请重新申请");
+      // show.value = true;
+      ms.error("您的密钥已经过期，请重新申请");
       return;
     } else if (settingStore.model === 'gpt-4' && userIdentify.value === 1 && authInfo.value.vipToGpt4Num <= 0) {
-      show.value = true;
-      console.log("您的会员版chatgpt - 4次数已经用完了");
+      // show.value = true;
+      ms.error("您的会员版chatgpt - 4次数已经用完了");
       return;
     } else if (settingStore.model === 'gpt-4' && userIdentify.value === 0 && surplusNum.value < 10) {
-      show.value = true;
-      console.log("您的积分不足chatgpt4次数已经用完了");
+      // show.value = true;
+      ms.error("您的积分不足chatgpt4次数已经用完了");
       return;
     }
   }
@@ -886,7 +886,7 @@ onUnmounted(() => {
           </NButton>
         </div>
       </div>
-      <Setting v-if="show" v-model:visible="show" />
+      <!-- <Setting v-if="show" v-model:visible="show" /> -->
     </footer>
   </div>
 </template>
